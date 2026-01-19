@@ -1,4 +1,4 @@
-%function [] = Fig_electric_field(par)
+function [] = Fig_electric_field(par)
 % compute Delta for varying electric field
 
   % adapt position space grid
@@ -243,8 +243,14 @@
       set(gca,'YScale','log')
     end
 
-
+  
+    %%%%%%%%%%%%%%%%
+    % export
+    height = 800;
+    width  = 1600;
+    set(fig,'Position',[100 100 width height]);
+    
     exportgraphics(fig, 'Fig_electric_field.pdf','ContentType','vector')
 
-%end
+end
  

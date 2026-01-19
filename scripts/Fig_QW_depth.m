@@ -161,7 +161,7 @@ function [] = Fig_QW_depth(par)
 %%
   %%%%%%%%%%%%
   % plot
-    fig = figure(10002);clf;hold all;
+    fig = figure(10003);clf;hold all;
 
     cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
 
@@ -237,6 +237,12 @@ function [] = Fig_QW_depth(par)
     end
 
 
+    %%%%%%%%%%%%%%%%
+    % export
+    height = 800;
+    width  = 1600;
+    set(fig,'Position',[100 100 width height]);
+    
     exportgraphics(fig, 'Fig_QW_depth.pdf','ContentType','vector')
 
 end

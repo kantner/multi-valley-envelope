@@ -166,7 +166,7 @@ function [] = Fig_interface_width(par)
 %%
   %%%%%%%%%%%%
   % plot
-    fig = figure(10001);clf;hold all;
+    fig = figure(10002);clf;hold all;
 
     cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
 
@@ -241,7 +241,12 @@ function [] = Fig_interface_width(par)
       set(gca,'YScale','log')
     end
 
-
+    %%%%%%%%%%%%%%%%
+    % export
+    height = 800;
+    width  = 1600;
+    set(fig,'Position',[100 100 width height]);
+    
     exportgraphics(fig, 'Fig_interface_width.pdf','ContentType','vector')
 
 end
