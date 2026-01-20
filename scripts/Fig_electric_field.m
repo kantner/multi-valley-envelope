@@ -5,11 +5,10 @@ function [] = Fig_electric_field(par)
     par.z = [0:par.N-1]'*par.dz - par.L/2;
 
   % field strength position
-    param_range = linspace(-1,+1,101) * 10 * 1E6;
+    param_range = linspace(-1,+1,41) * 6 * 1E6;
 
   % potential offsets
-    Uoff_range = [0 : 0.1 : 1.0]*par.units.eV;
-    Uoff_range = 0;
+    Uoff_range = par.U0_sweep_range;
     
 
   % allocate memory  
@@ -25,7 +24,7 @@ function [] = Fig_electric_field(par)
     par.discretization = 2; % 1 = finite difference | 2 = spectral
 
   % neigs
-    par.neigs = 50;
+    par.neigs = 40;
 
   % set QW indicator function  
     par.z0           = -par.h_QW/2; % set mid point
@@ -57,15 +56,13 @@ function [] = Fig_electric_field(par)
       par.envelope_model = 1; % 1 = LK-type | 2 = BF-type
       out_loc = compute_valley_splitting(x, 0, par);
       psi_loc = out_loc.S(:,out_loc.idx_gnd);
-
       Delta_loc(i_param, i_U)  = out_loc.Delta_det;
 
     %%%%%%%%%%%%%%  
     % compute valley splitting: non-local
       par.envelope_model = 2; % 1 = LK-type | 2 = BF-type
       out_nloc = compute_valley_splitting(x, 0, par);
-      psi_nloc = out_nloc.S(:,out_nloc.idx_gnd);
-
+      psi_nloc = out_nloc.S(:,out_nloc.idx_gnd);      
       Delta_nloc(i_param, i_U) = out_nloc.Delta_det;      
       
     %%%%%%%%%%%%%%  
@@ -79,7 +76,6 @@ function [] = Fig_electric_field(par)
 
     % compute valley coupling parameter
       Delta_filt(i_param, i_U) = compute_Delta_det(psi_filt, x, par);
-
 
     %%%%%%%%%%%  
     % compute parameter R (measure for gauge invariance violation)
@@ -161,9 +157,11 @@ function [] = Fig_electric_field(par)
   
       drawnow
 
-      
+      %pause
 
       end
+
+
     end
 %%
   %%%%%%%%%%%%
@@ -188,8 +186,8 @@ function [] = Fig_electric_field(par)
 
       if i_U == length(Uoff_range)
       plot(param_range/param_scale, 2*abs(Delta_nloc(:,i_U))/par.units.ueV,'r-','LineWidth',2,'DisplayName','non-local')
-      plot(param_range/param_scale, 2*abs(flip(Delta_nloc(:,i_U)))/par.units.ueV,'rx','LineWidth',2,'DisplayName','non-local mirrored')
-      plot(param_range/param_scale, 2*abs(Delta_filt(:,i_U))/par.units.ueV,'g-.','LineWidth',2,'DisplayName','local filtered')
+      plot(param_range/param_scale, 2*abs(flip(Delta_nloc(:,i_U)))/par.units.ueV,'mo','LineWidth',2,'DisplayName','non-local mirrored')
+      plot(param_range/param_scale, 2*abs(Delta_filt(:,i_U))/par.units.ueV,'g--','LineWidth',2,'DisplayName','local filtered')
       end
 
 

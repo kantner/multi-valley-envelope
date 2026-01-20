@@ -5,7 +5,7 @@ function [] = Fig_QW_depth(par)
     param_range = linspace(0,1,101)*par.X_barrier;
 
   % potential offsets
-    Uoff_range = [0 : 0.1 : 1.0]*par.units.eV;
+    Uoff_range = par.U0_sweep_range;
 
   % allocate memory  
     Delta_loc  = zeros(length(param_range), length(Uoff_range));

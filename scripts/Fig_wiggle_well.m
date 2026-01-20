@@ -8,7 +8,7 @@ function [] = Fig_wiggle_well(par)
     xGe = 0.05;
 
   % potential offsets
-    Uoff_range = [0 : 0.1 : 1.0]*par.units.eV;
+    Uoff_range = par.U0_sweep_range;
 
   % allocate memory  
     Delta_loc  = zeros(length(param_range), length(Uoff_range));

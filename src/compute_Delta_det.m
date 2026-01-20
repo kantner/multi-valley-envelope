@@ -1,6 +1,9 @@
 function [Delta_det, D_Delta_det_dX, D_Delta_det_dpsi, Delta_det_n] = compute_Delta_det(psi0, x, par)
 % compute deterministic part of complex-valued valley-splitting parameter
   
+% DEBUG = 0 | 1 (plot integrand)
+  DEBUG = 0;
+
 % allocate
   integral = zeros(length(par.n_range), 1);
 
@@ -8,11 +11,22 @@ function [Delta_det, D_Delta_det_dX, D_Delta_det_dpsi, Delta_det_n] = compute_De
     D_Delta_det_dX   = zeros(par.N, 1);
     D_Delta_det_dpsi = zeros(par.N, 1);
   end
-         
+      
+
+  if DEBUG == 1
+    integrand = zeros(par.N,1);
+  end
+
   for in = 1 : length(par.n_range)
     [f,df_dX,df_dpsi] = kernel_I_det(par.n_range(in), psi0, x, par);
 
     integral(in) = par.dz * sum(f);
+
+
+    if DEBUG == 1
+      integrand = integrand + par.C2(in) * f;      
+    end
+
 
     if nargout > 1
       % compute functional derivates
@@ -32,6 +46,16 @@ function [Delta_det, D_Delta_det_dX, D_Delta_det_dpsi, Delta_det_n] = compute_De
 % export details about contributions from resonances index by n
   if nargout >= 4    
     Delta_det_n    = par.C2 .* integral;
+  end
+
+  if DEBUG == 1
+    figure(24332);clf;hold all;
+    plot(par.z/par.units.nm, abs(integrand),'ko-')
+    title('integrand of valley coupling parameter')
+    xlabel('space (nm')
+    box on
+    drawnow
+    pause
   end
 
 end

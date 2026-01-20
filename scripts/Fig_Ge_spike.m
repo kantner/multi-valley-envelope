@@ -11,7 +11,7 @@ function [] = Fig_Ge_spike(par)
     sigma_spike = 2 * par.units.ML;
 
   % potential offsets
-    Uoff_range = [0 : 0.1 : 1.0]*par.units.eV;
+    Uoff_range = par.U0_sweep_range;
 
   % allocate memory  
     Delta_loc  = zeros(length(param_range), length(Uoff_range));
