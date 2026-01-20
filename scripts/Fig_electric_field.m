@@ -9,6 +9,7 @@ function [] = Fig_electric_field(par)
 
   % potential offsets
     Uoff_range = [0 : 0.1 : 1.0]*par.units.eV;
+    Uoff_range = 0;
     
 
   % allocate memory  
