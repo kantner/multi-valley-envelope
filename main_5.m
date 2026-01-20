@@ -139,7 +139,7 @@ clc
   %}
   %%%%%%%%%%%%%%%%
   % grid
-    par.N_BZ  = 2^6; % number of Brillouin zones (determines spatial resolution dz)
+    par.N_BZ  = 2^4; % number of Brillouin zones (determines spatial resolution dz)
     par.N_FBZ = 2^9; % number of points in 1st Brillouin zone (determines domain size L and how well k0 is matched on the grid)
     par.N     = par.N_BZ * par.N_FBZ;
 
@@ -147,7 +147,7 @@ clc
     par.dz = par.L/par.N; % = 2*pi/(G0(3) * par.N_BZ)
 
     %par.z = [0:par.N-1]'*par.dz - par.L/2;
-    par.z = [0:par.N-1]'*par.dz - par.L + 2*par.h_QW;
+    par.z = [0:par.N-1]'*par.dz - par.L + 3*par.h_QW;
 
     par.k = 2*pi/par.L*[0:par.N/2-1, -par.N/2:-1]';
 
@@ -178,7 +178,7 @@ clc
     par.QW_indicator = 0.5 * tanh((par.z+0.5*par.h_QW)/par.sigma_l) + 0.5*tanh((-par.z+0.5*par.h_QW)/par.sigma_u);  % QW at [-h/2 h/2]
     %par.QW_indicator = 0.5 * tanh((par.z+par.h_QW)/par.sigma_l) + 0.5 * tanh((-par.z)/par.sigma_u);                 % QW at [-h 0]
   
-    par.z0 = 40*par.units.nm;
+    par.z0 = - par.h_QW/2;
     par.QW_indicator = 0.5 * tanh((par.z-par.z0+0.5*par.h_QW)/par.sigma_l) + 0.5*tanh((-par.z+par.z0+0.5*par.h_QW)/par.sigma_u);  % QW at [a-h/2, a+h/2]
 
   % nominal alloy profile
@@ -204,6 +204,9 @@ clc
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
  %% make figures for the paper 
+  % list of potential offsets
+    par.U0_sweep_range = [0 : 0.1 : 1.0] * par.units.eV;
+
   % interface dependency
   % Fig_interface_width(par)
 

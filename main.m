@@ -139,7 +139,7 @@ clc
   %}
   %%%%%%%%%%%%%%%%
   % grid
-    par.N_BZ  = 2^2; % number of Brillouin zones (determines spatial resolution dz)
+    par.N_BZ  = 2^4; % number of Brillouin zones (determines spatial resolution dz)
     par.N_FBZ = 2^9; % number of points in 1st Brillouin zone (determines domain size L and how well k0 is matched on the grid)
     par.N     = par.N_BZ * par.N_FBZ;
 
