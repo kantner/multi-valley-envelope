@@ -169,6 +169,7 @@ function [] = Fig_electric_field(par)
     fig = figure(10001);clf;hold all;
 
     cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
+    cmap = flipud(cmap);
 
     param_scale = 1E6;
 

@@ -24,7 +24,7 @@ function [] = Fig_Ge_spike(par)
 
 
   % set electric field
-    par.F    = 5.0 * 1E6;
+    par.F    = 3.0 * 1E6;
     par.U_F  = -par.const.e0 * par.F * par.z;   
 
   % discretization method (kinetic energy operator, only for LK-type)
@@ -171,6 +171,7 @@ function [] = Fig_Ge_spike(par)
     fig = figure(10005);clf;hold all;
 
     cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
+    cmap = flipud(cmap);
 
     param_scale = par.units.nm;
 
@@ -252,5 +253,5 @@ function [] = Fig_Ge_spike(par)
 
     savefig(fig, 'Fig_Ge_spike.fig')
 
-%end
+end
  

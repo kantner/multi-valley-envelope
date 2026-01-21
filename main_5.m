@@ -144,7 +144,7 @@ clc
     
   % substitute k0 with closest match on grid
     par.k0_backup = par.k0;
-    par.k0_target = par.k0;
+    par.k0_target = par.k0;q
     idx_k0 = find(abs(par.k-par.k0_target) == min(abs(par.k-par.k0_target)));
     par.k0 = par.k(idx_k0);
     par.k1 = 2*pi/par.a0 * (1-par.eps(3,3)) - par.k0;
@@ -185,7 +185,7 @@ clc
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
  %% make figures for the paper 
   % list of potential offsets
-    par.U0_sweep_range = [0 : 0.1 : 1.0] * par.units.eV;
+    par.U0_sweep_range = [-1.0 : 0.1 : 1.0] * par.units.eV;
 
   % interface dependency
   % Fig_interface_width(par)
@@ -194,7 +194,7 @@ clc
   % Fig_electric_field(par)
 
   % QW depth  
-  % Fig_QW_depth(par)
+  % Fig_QW_depthq(par)
 
   % wiggle well
   % Fig_wiggle_well(par)  

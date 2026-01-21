@@ -164,6 +164,7 @@ function [] = Fig_QW_depth(par)
     fig = figure(10003);clf;hold all;
 
     cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
+    cmap = flipud(cmap);
 
     param_scale = 1;
 

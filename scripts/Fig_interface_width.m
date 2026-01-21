@@ -2,7 +2,7 @@ function [] = Fig_interface_width(par)
 % compute Delta for varying interface sharpness
 
   % interface sharpness (sigma)
-    param_range = linspace(0,10,101)*par.units.ML;
+    param_range = linspace(0,10.5,101)*par.units.ML;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
@@ -17,7 +17,7 @@ function [] = Fig_interface_width(par)
     R_filt = zeros(length(param_range), length(Uoff_range));
 
   % set electric field
-    par.F    = 5.0 * 1E6;
+    par.F    = 3.0 * 1E6;
     par.U_F  = -par.const.e0 * par.F * par.z;   
 
   % discretization method (kinetic energy operator, only for LK-type)
@@ -169,6 +169,7 @@ function [] = Fig_interface_width(par)
     fig = figure(10002);clf;hold all;
 
     cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
+    cmap = flipud(cmap);
 
     param_scale = par.units.ML;
 
@@ -194,6 +195,7 @@ function [] = Fig_interface_width(par)
       box on
       xlabel('interface width \sigma (ML)')
       ylabel('valley splitting 2 |\Delta| (ueV)')
+      xlim([-0.5, 10.5])
     
 
     %%%%%%%%%%%%%%%%%%%%%%

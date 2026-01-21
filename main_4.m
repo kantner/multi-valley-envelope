@@ -185,7 +185,7 @@ clc
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
  %% make figures for the paper 
   % list of potential offsets
-    par.U0_sweep_range = [0 : 0.1 : 1.0] * par.units.eV;
+    par.U0_sweep_range = [-1.0 : 0.1 : 1.0] * par.units.eV;
 
   % interface dependency
   % Fig_interface_width(par)
