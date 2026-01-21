@@ -252,5 +252,7 @@ function [] = Fig_wiggle_well(par)
     
     exportgraphics(fig, 'Fig_wiggle_well.pdf','ContentType','vector')
 
+    savefig(fig, 'Fig_wiggle_well.fig')
+
 end
  

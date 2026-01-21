@@ -5,7 +5,7 @@ function [] = Fig_electric_field(par)
     par.z = [0:par.N-1]'*par.dz - par.L/2;
 
   % field strength position
-    param_range = linspace(-1,+1,41) * 6 * 1E6;
+    param_range = linspace(-1,+1,31) * 6 * 1E6;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
@@ -24,7 +24,7 @@ function [] = Fig_electric_field(par)
     par.discretization = 2; % 1 = finite difference | 2 = spectral
 
   % neigs
-    par.neigs = 40;
+    par.neigs = 30;
 
   % set QW indicator function  
     par.z0           = -par.h_QW/2; % set mid point
@@ -250,6 +250,8 @@ function [] = Fig_electric_field(par)
     set(fig,'Position',[100 100 width height]);
     
     exportgraphics(fig, 'Fig_electric_field.pdf','ContentType','vector')
+
+    savefig(fig, 'Fig_electric_field.fig')
 
 end
  

@@ -250,5 +250,7 @@ function [] = Fig_Ge_spike(par)
     set(fig,'Position',[100 100 width height]);
     exportgraphics(fig, 'Fig_Ge_spike.pdf','ContentType','vector')
 
+    savefig(fig, 'Fig_Ge_spike.fig')
+
 %end
  

@@ -249,5 +249,7 @@ function [] = Fig_interface_width(par)
     
     exportgraphics(fig, 'Fig_interface_width.pdf','ContentType','vector')
 
+    savefig(fig, 'Fig_interface_width.fig')
+
 end
  

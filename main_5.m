@@ -126,18 +126,6 @@ clc
     par.envelope_model = 1; % 1 = LK-type | 2 = BF-type
 
   %%%%%%%%%%%%%%%%
-  %{
-  % grid
-    par.N  = 2^12;
-    par.L  = 4*par.h_QW;
-    par.dz = par.L/par.N;
-    par.z  = [0:par.N-1]'*par.dz - par.L/2;
-
-  % k-space grid  
-    par.k = [0 : par.N/2-1, -par.N/2:-1]'*2*pi/par.L;
-
-  %}
-  %%%%%%%%%%%%%%%%
   % grid
     par.N_BZ  = 2^4; % number of Brillouin zones (determines spatial resolution dz)
     par.N_FBZ = 2^9; % number of points in 1st Brillouin zone (determines domain size L and how well k0 is matched on the grid)
@@ -145,33 +133,26 @@ clc
 
     par.L  = 2*pi*par.N_FBZ/par.G0(3);
     par.dz = par.L/par.N; % = 2*pi/(G0(3) * par.N_BZ)
-
-    %par.z = [0:par.N-1]'*par.dz - par.L/2;
-    par.z = [0:par.N-1]'*par.dz - par.L + 3*par.h_QW;
-
-    par.k = 2*pi/par.L*[0:par.N/2-1, -par.N/2:-1]';
-
-   % par.idx_SBZ_p = 0 <= par.k & par.k< par.G0(3)/2;
-   % par.idx_SBZ_m = -par.G0(3)/2 <= par.k & par.k< 0;
     
-   % SBZ plane wave indicators: omit the origin (+k0) and the lower boundary (-k0) to ensure F_+^* = F_
+  % make position and k-space grid  
+    par.z = [0:par.N-1]'*par.dz - par.L + 3*par.h_QW;
+    par.k = 2*pi/par.L*[0:par.N/2-1, -par.N/2:-1]';
+    
+  % SBZ plane wave indicators: omit the origin (+k0) and the lower boundary (-k0) to ensure F_+^* = F_
     par.idx_SBZ_p = 0 < par.k & par.k < par.G0(3)/2;
     par.idx_SBZ_m = -par.G0(3)/2 < par.k & par.k< 0;
     
-    %
+  % substitute k0 with closest match on grid
     par.k0_backup = par.k0;
     par.k0_target = par.k0;
     idx_k0 = find(abs(par.k-par.k0_target) == min(abs(par.k-par.k0_target)));
     par.k0 = par.k(idx_k0);
     par.k1 = 2*pi/par.a0 * (1-par.eps(3,3)) - par.k0;
 
-  % replace k0
     fprintf(1,'original    k0 = %.5f 2*pi/a0\n',par.k0_backup*par.a0/(2*pi))
     fprintf(1,'substitute  k0 = %.5f 2*pi/a0\n',par.k0*par.a0/(2*pi))
     fprintf(1,'difference dk0 = %.5f 2*pi/a0\n',(par.k0_backup-par.k0)*par.a0/(2*pi))
 
-    pause
-    %}
      
   %%%%%%%%%%%%%%%%
   % quantum well indicator function
@@ -192,7 +173,6 @@ clc
     
   %%%%%%%%%%%%%%%%
   % numerics
-
   % discretization method (kinetic energy operator, only for LK-type)
     par.discretization = 2; % 1 = finite difference | 2 = spectral
 

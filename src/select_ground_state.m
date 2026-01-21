@@ -38,7 +38,8 @@ function idx_gnd = select_ground_state(S, E, psi_ref, x, par)
   % selection criterion  
     %criterion = overlap./sqrt(energy_dist);
     format shorte
-    criterion = abs(overlap)./(energy_dist.^1.0);
+    %criterion = abs(overlap)./(energy_dist.^1.0);
+    criterion = (abs(overlap).^2)./energy_dist;
 
     [overlap, energy_dist, criterion]
           
