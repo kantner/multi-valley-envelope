@@ -55,7 +55,7 @@ function [Delta_det, D_Delta_det_dX, D_Delta_det_dpsi, Delta_det_n] = compute_De
     xlabel('space (nm')
     box on
     drawnow
-    pause
+    pause(0.1)
   end
 
 end

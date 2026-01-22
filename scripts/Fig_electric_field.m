@@ -103,68 +103,9 @@ function [] = Fig_electric_field(par)
 
     %%%%%%%%  
     % plot wave functions
-      figure(1); clf; hold all;
-
-      subplot(1,2,1); hold all;
-  
-      plot_func = @(x) abs(x).^2;    
-      
-      plot(par.z/par.units.nm, (par.U_F + par.U_QW + par.dEc*x)/par.units.meV, 'k-','LineWidth',2,'DisplayName','potential U')
-      for i = 1 : par.neigs
-        out = out_loc;
-        plot(par.z/par.units.nm, out.E(i)/par.units.meV + par.N * plot_func(out.S(:,i)), '-','Color',[1 1 1]*0.9,'LineWidth',2,'DisplayName','local')
-  
-        out = out_nloc;      
-        plot(par.z/par.units.nm, out.E(i)/par.units.meV + par.N * plot_func(out.S(:,i)), '--','Color',[1 1 1]*0.7,'LineWidth',2,'DisplayName','non-local')
-      end
-      
-    % highlight ground state  
-      out = out_loc;
-      plot(par.z/par.units.nm, out.E(out.idx_gnd)/par.units.meV + par.N * plot_func(psi_loc), '-','Color',[0 0 1]*0.9,'LineWidth',2,'DisplayName','local')
-  
-      plot(par.z/par.units.nm, out.E(out.idx_gnd)/par.units.meV + par.N * plot_func(psi_filt), ':','Color',[0 1 0]*0.9,'LineWidth',2,'DisplayName','local filtered')
-            
-      out = out_nloc;    
-      plot(par.z/par.units.nm, out.E(out.idx_gnd)/par.units.meV + par.N * plot_func(psi_nloc), '--','Color',[1 0 0]*0.9,'LineWidth',2,'DisplayName','non-local')
-    
-      title('solid = loc | dashed = nloc')
-      xlabel('z (nm)')
-      ylabel('energy (ueV)')
-      box on
-      legend()
-  
-    %%%%%%%%  
-    % plot wave functions power spectral density
-      subplot(1,2,2); hold all;
-  
-
-      xscale = max(abs(fftshift(fft(out.S(:,out.idx_gnd)))).^2);
-
-      out = out_loc;
-      plot(fftshift(par.k) * par.a0/(2*pi), abs(fftshift(fft(out.S(:,out.idx_gnd)))).^2 / xscale, '-','Color',[0 0 1]*0.9,'LineWidth',2,'DisplayName','local')
-  
-      plot(fftshift(par.k) * par.a0/(2*pi), abs(fftshift(fft(psi_filt))).^2 / xscale, '-','Color',[0 1 0]*0.9,'LineWidth',2,'DisplayName','local filtered')
-
-      out = out_nloc;
-      plot(fftshift(par.k) * par.a0/(2*pi), abs(fftshift(fft(out.S(:,out.idx_gnd)))).^2 / xscale, '--','Color',[1 0 0]*0.9,'LineWidth',2,'DisplayName','non-local')
-  
-      xlabel('wave number k (2\pi/a_0)')  
-      ylabel('PSD (a.u.)')
-
-      xline((par.G0(3)/2-par.k0)* par.a0/(2*pi),'k--','DisplayName','max(k)')
-      xline((0-par.k0)* par.a0/(2*pi),'k--','DisplayName','min(k)')
-      
-      box on
-      set(gca,'YScale','log'  )
-      legend()
-  
-      drawnow
-
-      %pause
+      plot_wave_functions_loc_nloc(out_loc, out_nloc, x, par)
 
       end
-
-
     end
 
   %%%%%%%%%%%%  
@@ -172,93 +113,19 @@ function [] = Fig_electric_field(par)
     save([filename,'.mat'],'-v7.3')
 
   %%%%%%%%%%%%
-  % plot
-    fig = figure(10001);clf;hold all;
+  % plot    
+    param_scale = 1E-3/par.units.nm;
+    xaxis_label = 'electric field (mV/nm)';
+    plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)
 
-    cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
-    cmap = flipud(cmap);
-
-    param_scale = 1E6;
-
-
-    for i_U = 1 : length(Uoff_range)
-
-      color = [0.7 0.7 1]* i_U/length(Uoff_range);
-
-    %%%%%%%%%%%%%%%%%%%%%%
-    % valley splitting
-      subplot(2,2,1); hold all;
-
-      
-      plot(param_range/param_scale, 2*abs(Delta_loc(:,i_U))/par.units.ueV ,'-','Color',cmap(i_U,:),'LineWidth',2,'DisplayName',['local (U_0 = ',num2str(Uoff_range(i_U)/par.units.eV),' eV)'])
-
-      if i_U == length(Uoff_range)
-      plot(param_range/param_scale, 2*abs(Delta_nloc(:,i_U))/par.units.ueV,'r-','LineWidth',2,'DisplayName','non-local')
-      plot(param_range/param_scale, 2*abs(flip(Delta_nloc(:,i_U)))/par.units.ueV,'mo','LineWidth',2,'DisplayName','non-local mirrored')
-      plot(param_range/param_scale, 2*abs(Delta_filt(:,i_U))/par.units.ueV,'g--','LineWidth',2,'DisplayName','local filtered')
-      end
-
-
-      legend('Location','best')
-      box on
-      xlabel('electric field F (mV/nm)')
-      ylabel('valley splitting 2 |\Delta| (ueV)')
-    
-
-    %%%%%%%%%%%%%%%%%%%%%%
-    % absolute error
-    subplot(2,2,2); hold all;
-
-      if i_U == 1
-      plot(param_range/param_scale, 2*abs(abs(Delta_filt(:,i_U))-abs(Delta_nloc(:,i_U)))/par.units.ueV,'k-','LineWidth',2,'DisplayName','abs error')
-      end
-
-      legend()
-      box on
-      xlabel('electric field F (mV/nm)')
-      ylabel('abs difference |E_{VS}^{filt}- E_{VS}^{nloc}| (ueV)')
-      
-    %%%%%%%%%%%%%%%%%%%%%%
-    % arbitrariness (violation of gauge invariance)  
-    subplot(2,2,3); hold all;
-    
-      if i_U == 1
-      plot(param_range/param_scale, 2*abs(R_loc(:,i_U)),'b-','DisplayName','R_{loc}','LineWidth',2)
-      end
-      
-      %plot(param_range/param_scale, 2*abs(R_nloc(:,i_U)),'r-','DisplayName','R_{nloc}','LineWidth',2)
-      %plot(param_range/param_scale, 2*abs(R_filt(:,i_U)),'g--','DisplayName','R_{loc}^{filt}','LineWidth',2)
-
-      legend()
-      box on
-      xlabel('electric field F (mV/nm)')
-      ylabel('arbitrariness 2|R|')
-    
-
-    %%%%%%%%%%%%%%%%%%%%%%
-    % relative error
-    subplot(2,2,4); hold all;
-
-      if i_U == 1
-      plot(param_range/param_scale, abs(abs(Delta_filt(:,i_U))-abs(Delta_nloc(:,i_U)))./abs(Delta_nloc(:,i_U)),'k-','LineWidth',2,'DisplayName','rel error')
-      end
-
-      legend()
-      box on
-      xlabel('electric field F (mV/nm)')
-      ylabel('relative error |E_{VS}^{filt}- E_{VS}^{nloc}|/E_{VS}^{nloc}')      
-      set(gca,'YScale','log')
-    end
-
-  
-    %%%%%%%%%%%%%%%%
-    % export
+  %%%%%%%%%%%%%%%%
+  % export
     height = 800;
     width  = 1600;
-    set(fig,'Position',[100 100 width height]);   
-    exportgraphics(fig, [filename,'.pdf'],'ContentType','vector')
+    set(gcf,'Position',[100 100 width height]);   
+    exportgraphics(gcf, [filename,'.pdf'],'ContentType','vector')
 
-    savefig(fig, [filename,'.fig'])
+    savefig(gcf, [filename,'.fig'])
 
 end
  
