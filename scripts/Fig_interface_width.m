@@ -6,7 +6,6 @@ function [] = Fig_interface_width(par)
 
   % interface sharpness (sigma)
     param_range = linspace(0,10.5,101)*par.units.ML;
-    param_range = linspace(0,10.5,5)*par.units.ML;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;

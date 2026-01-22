@@ -9,7 +9,6 @@ function [] = Fig_electric_field(par)
 
   % field strength position
     param_range = linspace(-1,+1,31) * 6 * 1E6;
-    param_range = linspace(-1,+1,5) * 6 * 1E6;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;

@@ -6,7 +6,6 @@ function [] = Fig_Ge_spike(par)
 
   % spike position
     param_range = linspace(-1,0,151)*par.h_QW;
-    param_range = linspace(-1,0,5)*par.h_QW;
 
   % Ge amplitude  
     xGe = 0.6;

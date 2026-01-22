@@ -6,7 +6,6 @@ function [] = Fig_wiggle_well(par)
 
   % WW wave number
     param_range = linspace(0,2,151)*2*pi/par.a0;
-    param_range = linspace(0,2,5)*2*pi/par.a0;
 
   % Ge amplitude  
     xGe = 0.05;

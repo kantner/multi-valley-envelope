@@ -5,8 +5,7 @@ function [] = Fig_QW_depth(par)
     filename = 'Fig_QW_depth';
 
   % Ge content in QW position
-    param_range = linspace(0,1,51)*par.X_barrier;
-    param_range = linspace(0,1,5)*par.X_barrier;
+    param_range = linspace(0,1,71)*par.X_barrier;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
