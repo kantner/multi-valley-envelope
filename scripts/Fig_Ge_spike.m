@@ -1,8 +1,12 @@
 function [] = Fig_Ge_spike(par)
 % compute Delta for Ge spike
 
+  % filename
+    filename = 'Fig_Ge_spike';
+
   % spike position
     param_range = linspace(-1,0,151)*par.h_QW;
+    param_range = linspace(-1,0,5)*par.h_QW;
 
   % Ge amplitude  
     xGe = 0.6;
@@ -165,7 +169,11 @@ function [] = Fig_Ge_spike(par)
 
       end
     end
-%%
+
+  %%%%%%%%%%%%  
+  % save data  
+    save([filename,'.mat'],'-v7.3')    
+
   %%%%%%%%%%%%
   % plot
     fig = figure(10005);clf;hold all;
@@ -248,10 +256,10 @@ function [] = Fig_Ge_spike(par)
     % export
     height = 800;
     width  = 1600;
-    set(fig,'Position',[100 100 width height]);
-    exportgraphics(fig, 'Fig_Ge_spike.pdf','ContentType','vector')
+    set(fig,'Position',[100 100 width height]);    
+    exportgraphics(fig, [filename,'.pdf'],'ContentType','vector')
 
-    savefig(fig, 'Fig_Ge_spike.fig')
+    savefig(fig, [filename,'.fig'])
 
 end
  

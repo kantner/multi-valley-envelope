@@ -1,11 +1,15 @@
 function [] = Fig_electric_field(par)
 % compute Delta for varying electric field
 
+  % filename
+    filename = 'Fig_electric_field';
+
   % adapt position space grid
     par.z = [0:par.N-1]'*par.dz - par.L/2;
 
   % field strength position
     param_range = linspace(-1,+1,31) * 6 * 1E6;
+    param_range = linspace(-1,+1,5) * 6 * 1E6;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
@@ -163,7 +167,11 @@ function [] = Fig_electric_field(par)
 
 
     end
-%%
+
+  %%%%%%%%%%%%  
+  % save data  
+    save([filename,'.mat'],'-v7.3')
+
   %%%%%%%%%%%%
   % plot
     fig = figure(10001);clf;hold all;
@@ -248,11 +256,10 @@ function [] = Fig_electric_field(par)
     % export
     height = 800;
     width  = 1600;
-    set(fig,'Position',[100 100 width height]);
-    
-    exportgraphics(fig, 'Fig_electric_field.pdf','ContentType','vector')
+    set(fig,'Position',[100 100 width height]);   
+    exportgraphics(fig, [filename,'.pdf'],'ContentType','vector')
 
-    savefig(fig, 'Fig_electric_field.fig')
+    savefig(fig, [filename,'.fig'])
 
 end
  

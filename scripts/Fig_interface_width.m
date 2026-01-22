@@ -1,8 +1,12 @@
 function [] = Fig_interface_width(par)
 % compute Delta for varying interface sharpness
 
+  % filename
+    filename = 'Fig_interface_width';
+
   % interface sharpness (sigma)
     param_range = linspace(0,10.5,101)*par.units.ML;
+    param_range = linspace(0,10.5,5)*par.units.ML;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
@@ -163,7 +167,11 @@ function [] = Fig_interface_width(par)
 
       end
     end
-%%
+
+  %%%%%%%%%%%%  
+  % save data  
+    save([filename,'.mat'],'-v7.3')
+
   %%%%%%%%%%%%
   % plot
     fig = figure(10002);clf;hold all;
@@ -247,11 +255,10 @@ function [] = Fig_interface_width(par)
     % export
     height = 800;
     width  = 1600;
-    set(fig,'Position',[100 100 width height]);
-    
-    exportgraphics(fig, 'Fig_interface_width.pdf','ContentType','vector')
+    set(fig,'Position',[100 100 width height]);   
+    exportgraphics(fig, [filename,'.pdf'],'ContentType','vector')
 
-    savefig(fig, 'Fig_interface_width.fig')
+    savefig(fig, [filename,'.fig'])
 
 end
  

@@ -1,8 +1,12 @@
 function [] = Fig_QW_depth(par)
 % compute Delta for varying QW depth
 
+  % filename
+    filename = 'Fig_QW_depth';
+
   % Ge content in QW position
     param_range = linspace(0,1,51)*par.X_barrier;
+    param_range = linspace(0,1,5)*par.X_barrier;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
@@ -158,7 +162,11 @@ function [] = Fig_QW_depth(par)
 
       end
     end
-%%
+
+  %%%%%%%%%%%%  
+  % save data  
+    save([filename,'.mat'],'-v7.3')
+
   %%%%%%%%%%%%
   % plot
     fig = figure(10003);clf;hold all;
@@ -237,16 +245,14 @@ function [] = Fig_QW_depth(par)
       set(gca,'YScale','log')
     end
 
-
-    %%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%
     % export
     height = 800;
     width  = 1600;
-    set(fig,'Position',[100 100 width height]);
-    
-    exportgraphics(fig, 'Fig_QW_depth.pdf','ContentType','vector')
+    set(fig,'Position',[100 100 width height]);   
+    exportgraphics(fig, [filename,'.pdf'],'ContentType','vector')
 
-    savefig(fig, 'Fig_QW_depth.fig')
+    savefig(fig, [filename,'.fig'])
 
 end
  

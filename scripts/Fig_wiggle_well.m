@@ -1,8 +1,12 @@
 function [] = Fig_wiggle_well(par)
 % compute Delta for wiggle wells
 
+  % filename
+    filename = 'Fig_wiggle_well';
+
   % WW wave number
     param_range = linspace(0,2,151)*2*pi/par.a0;
+    param_range = linspace(0,2,5)*2*pi/par.a0;
 
   % Ge amplitude  
     xGe = 0.05;
@@ -165,13 +169,20 @@ function [] = Fig_wiggle_well(par)
 
       end
     end
-%%
-  %%%%%%%%%%%%
+
+  %%%%%%%%%%%%  
+  % save data  
+    save([filename,'.mat'],'-v7.3')
+
+  
+  %% %%%%%%%%%%
   % plot
     fig = figure(10004);clf;hold all;
 
     cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
     cmap = flipud(cmap);
+
+    cmap = brighten(winter(length(Uoff_range)),0.3);
 
     param_scale = 2*pi/par.a0;
 
@@ -245,15 +256,14 @@ function [] = Fig_wiggle_well(par)
     end
 
 
-    %%%%%%%%%%%%%%%%
+    %% %%%%%%%%%%%%%%
     % export
     height = 800;
     width  = 1600;
-    set(fig,'Position',[100 100 width height]);
-    
-    exportgraphics(fig, 'Fig_wiggle_well.pdf','ContentType','vector')
+    set(fig,'Position',[100 100 width height]);   
+    exportgraphics(fig, [filename,'.pdf'],'ContentType','vector')
 
-    savefig(fig, 'Fig_wiggle_well.fig')
+    savefig(fig, [filename,'.fig'])
 
 end
  

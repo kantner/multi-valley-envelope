@@ -119,7 +119,7 @@ clc
     par.sigma_l   = 0.5 * par.units.nm; % width of lower interface
 
   % vertical electric field (in V/m)
-    par.F       = 5.0 * 1E6;
+    par.F       = 3.0 * 1E6;
 
   %%%%%%%%%%%%%%%%%  
   % envelope model 
@@ -182,11 +182,14 @@ clc
   % dummy value for artificially negative covariance functions
     par.Gamma_failure = 1E99;
 
+    return
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
  %% make figures for the paper 
   % list of potential offsets
-    par.U0_sweep_range = [0 : 0.1 : 1.0] * par.units.eV;
-
+    par.U0_sweep_range = [-1.0 : 0.1 : 1.0] * par.units.eV;
+    par.U0_sweep_range = [-1.0 : 1.0 : 1.0] * par.units.eV;
+    par.U0_sweep_range = 0 * par.units.eV;
+%{
   % interface dependency
     Fig_interface_width(par)
 
@@ -201,4 +204,42 @@ clc
       
   % Ge spike
     Fig_Ge_spike(par)
-   
+%}
+
+  % QW width
+    Fig_QW_width(par)
+
+
+%%
+cmd = ['ssh wias'];
+[status, output] = system(cmd)
+disp(output)
+%%
+server  = 'leonhard-22';
+jobName = 'jobA';
+folder  = 'multi-valley-envelope/';
+script  = 'main_1.m';
+
+cmd = sprintf([ ...
+    'ssh %s "screen -dmS %s ' ...
+    'cd %s ' ...
+    'matlab -nodisplay -r ''%s; exit''"'], ...
+    server, jobName, folder, script);
+
+[status, output] = system(cmd);
+disp(output)
+
+%%
+
+server   = 'leonhard-20';
+jobName  = 'jobA';
+script   = 'main_1';
+workdir  = '/Home/ode/kantner/multi-valley-envelope';
+
+cmd = sprintf('ssh %s "screen -dmS %s bash -c ''cd %s && pwd && matlab -nodisplay -nosplash -batch %s''"', ...
+              server, jobName, workdir, script);
+
+disp(cmd)      % always debug first
+[status, output] = system(cmd)
+disp(output)
+  
