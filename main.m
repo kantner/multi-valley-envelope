@@ -184,9 +184,19 @@ clc
 
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
- %% make figures for the paper 
+ %% run scripts / plot figures for manuscript
+
+  %%%%%%%%%
+  % compute coefficients C2 and B as function of shear strain
+    compute_C2_coefficients_vs_shear_strain(par)
+
+  %%%%%%%%%  
+  % plot wave functions and PSD
+    Fig_wave_function(par)
+
+  %%%%%%%%%%  
   % list of potential offsets    
-    par.U0_sweep_range = [-1.0 : 0.1 : 1.0] * par.units.eV; 
+    par.U0_sweep_range = [0 : 0.1 : 1.0] * par.units.eV; 
 
   % interface dependency
     Fig_interface_width(par)
@@ -205,4 +215,5 @@ clc
 
   % QW width
     Fig_QW_width(par)
+
 

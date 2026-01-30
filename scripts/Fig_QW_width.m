@@ -7,6 +7,8 @@ function [] = Fig_QW_width(par)
   % QW width
     param_range = geomspace(10,105,151,1.05) * par.units.ML;
 
+    param_range = linspace(16,20,9) * par.units.ML;
+
   % potential offsets
     Uoff_range = par.U0_sweep_range;
 
@@ -28,6 +30,9 @@ function [] = Fig_QW_width(par)
 
   % neigs
     par.neigs = 3;
+
+    par.sigma_l=0;
+    par.sigma_u=par.sigma_l;
 
     
   %%%%%%%%%%%%%%  
@@ -118,6 +123,10 @@ function [] = Fig_QW_width(par)
     param_scale = par.units.ML;
     xaxis_label = 'QW width (ML)';
     plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)
+
+    subplot(2,2,1); hold all;
+    xlim([8, 82])
+    ylim([-100, 1700])
 
   %%%%%%%%%%%%%%%%
   % export

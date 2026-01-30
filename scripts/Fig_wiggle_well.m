@@ -122,7 +122,15 @@ function [] = Fig_wiggle_well(par)
   % plot    
     param_scale = 2*pi/par.a0;
     xaxis_label = 'wave number q (2\pi/a_0)';
-    plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)
+    plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)x
+
+    subplot(2,2,1); hold all;
+    legend('Location','best')
+    xlim([0,2])
+    ylim([-100,3100])
+    xline(2*par.k0/param_scale,'k--','DisplayName','2 k_0')
+    xline(2*par.k1/param_scale,'k--','DisplayName','2 k_1')
+
 
   %%%%%%%%%%%%%%%%
   % export

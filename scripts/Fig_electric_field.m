@@ -109,14 +109,19 @@ function [] = Fig_electric_field(par)
     end
 
   %%%%%%%%%%%%  
-  % save data  
+ % save data  
     save([filename,'.mat'],'-v7.3')
 
   %%%%%%%%%%%%
   % plot    
     param_scale = 1E-3/par.units.nm;
     xaxis_label = 'electric field (mV/nm)';
-    plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)
+    plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)   
+
+    subplot(2,2,1); hold all;
+    legend('Location','northeastoutside')
+    xlim([-1,+1]*6)
+    ylim([-5,105])
 
   %%%%%%%%%%%%%%%%
   % export

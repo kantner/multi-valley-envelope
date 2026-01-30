@@ -124,6 +124,10 @@ function [] = Fig_Ge_spike(par)
     xaxis_label = 'spike position (nm)';
     plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)
 
+    subplot(2,2,1); hold all;
+    xlim([-10.2,0])
+    ylim([-40,740])
+
   %%%%%%%%%%%%%%%%
   % export
     height = 800;

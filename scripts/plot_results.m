@@ -1,10 +1,11 @@
 function [] = plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)
 
-    %cmap = brighten(1-lajolla(length(Uoff_range)),0.3);
-    %cmap = flipud(cmap);
+    cmap = 1-lajolla(length(Uoff_range));
+    %cmap = brighten(cmap,0.3);
+    cmap = flipud(cmap);
 
-    cmap = crest(length(Uoff_range));
-    cmap = brighten(cmap,0.5);
+    %cmap = crest(length(Uoff_range));
+    %cmap = brighten(cmap,0.5);
 
 
     figure(2); clf; hold all;
@@ -60,6 +61,7 @@ function [] = plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_f
 
     %%%%%%%%%%%%%%%%%%%%%%
     % relative error
+    %{
     subplot(2,2,4); hold all;
 
       if i_U == 1
@@ -71,6 +73,24 @@ function [] = plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_f
       xlabel(xaxis_label)
       ylabel('relative error |E_{VS}^{filt}- E_{VS}^{nloc}|/E_{VS}^{nloc}')      
       set(gca,'YScale','log')
+    
+    %}
+
+    %%%%%%%%%%%%%%%%%%%%%%
+    % R in complex plane
+    subplot(2,2,4); hold all;
+
+      if i_U == 2
+      plot(real(R_loc(:,i_U)), imag(R_loc(:,i_U)),'ko-','LineWidth',2,'DisplayName','R')
+      end
+
+      %legend()
+      box on
+      xlabel('Re(R)')
+      ylabel('Im(R)')
+      xline(0,'k--')
+      yline(0,'k--')
+      axis equal
     end
 
 

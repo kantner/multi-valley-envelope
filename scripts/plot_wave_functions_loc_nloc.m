@@ -1,7 +1,5 @@
 function [] = plot_wave_functions_loc_nloc(out_loc, out_nloc, x, par)
 
-
-
     %%%%%%%%  
     % plot wave functions
       figure(1); clf; hold all;

@@ -4,11 +4,8 @@ function [] = Fig_interface_width(par)
   % filename
     filename = 'Fig_interface_width';
 
-  % interface sharpness (sigma)
-    %param_range = linspace(0.5,10.5,41)*par.units.ML;
-    param_range = geomspace(0,10.5,61,1.1)*par.units.ML;
-
-    
+  % interface sharpness (sigma)    
+    param_range = geomspace(0.07,10.5,61,1.1)*par.units.ML;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
@@ -126,6 +123,20 @@ function [] = Fig_interface_width(par)
     xaxis_label = 'interface width (ML)';
     plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_filt, Uoff_range, param_range, param_scale, xaxis_label, par)
 
+    subplot(2,2,1); hold all;
+    xlim([0 10.5])
+    ylim([-5 145])
+
+    subplot(2,2,3); hold all;
+    xlim([0 10.5])
+    ylim([-0.05 1.85]*1E-4)
+
+
+    subplot(2,2,4); hold all;
+    xlim([-2.5 9.5]*1E-5)
+    ylim([-4.5 1.5]*1E-5)
+
+  
   %%%%%%%%%%%%%%%%
   % export
     height = 800;

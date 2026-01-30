@@ -184,7 +184,7 @@ function main_func(script_idx)
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
  %% make figures for the paper 
   % list of potential offsets
-    par.U0_sweep_range = [-1.0 : 0.1 : 1.0] * par.units.eV;
+    par.U0_sweep_range = [0 : 0.1 : 1.0] * par.units.eV;
 
   switch(script_idx)
     case 1

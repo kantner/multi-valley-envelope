@@ -1,21 +1,46 @@
-%function [] = Fig_wave_function(par)
+function [] = Fig_wave_function(par)
   % solve eigenvalue problem and plot wave function
   
-  % set electric field
-    par.F    = 3.0 * 1E6;
-    par.U_F  = -par.const.e0 * par.F * par.z;   
 
   % discretization method (kinetic energy operator, only for LK-type)
     par.discretization = 2; % 1 = finite difference | 2 = spectral
 
+  % grid
+    par.N_BZ  = 2^4; % number of Brillouin zones (determines spatial resolution dz)
+    par.N_FBZ = 2^10; % number of points in 1st Brillouin zone (determines domain size L and how well k0 is matched on the grid)
+    par.N     = par.N_BZ * par.N_FBZ;
+
+    par.L  = 2*pi*par.N_FBZ/par.G0(3);
+    par.dz = par.L/par.N; % = 2*pi/(G0(3) * par.N_BZ)
+    
+  % make position and k-space grid  
+    par.z = [0:par.N-1]'*par.dz - par.L + 3*par.h_QW;
+    par.k = 2*pi/par.L*[0:par.N/2-1, -par.N/2:-1]';
+    
+  % SBZ plane wave indicators: omit the origin (+k0) and the lower boundary (-k0) to ensure F_+^* = F_
+    par.idx_SBZ_p = 0 < par.k & par.k < par.G0(3)/2;
+    par.idx_SBZ_m = -par.G0(3)/2 < par.k & par.k< 0;
+    
+  % substitute k0 with closest match on grid
+    par.k0_backup = par.k0;
+    par.k0_target = par.k0;
+    idx_k0 = find(abs(par.k-par.k0_target) == min(abs(par.k-par.k0_target)));
+    par.k0 = par.k(idx_k0);
+    par.k1 = 2*pi/par.a0 * (1-par.eps(3,3)) - par.k0;
+
+    fprintf(1,'original    k0 = %.5f 2*pi/a0\n',par.k0_backup*par.a0/(2*pi))
+    fprintf(1,'substitute  k0 = %.5f 2*pi/a0\n',par.k0*par.a0/(2*pi))
+    fprintf(1,'difference dk0 = %.5f 2*pi/a0\n',(par.k0_backup-par.k0)*par.a0/(2*pi))
+
   % neigs
-    par.neigs = 50;
+    par.neigs = 20;
    
   % interface width
     par.sigma_l = 0.5 * par.units.nm;
     par.sigma_u = 0.5 * par.units.nm;
 
   % set QW indicator function  
+    par.h_QW         = 72*par.units.ML;
     par.z0           = -par.h_QW/2; % set mid point
     par.QW_indicator = 0.5 * tanh((par.z-par.z0+0.5*par.h_QW)/par.sigma_l) + 0.5*tanh((-par.z+par.z0+0.5*par.h_QW)/par.sigma_u);  % QW at [a-h/2, a+h/2]
 
@@ -26,6 +51,10 @@
   % QW potential from nominal (smoothed) profile
     par.U_QW = par.dEc * par.X_QW;    
       
+  % set electric field
+    par.F    = 3.0 * 1E6;
+    par.U_F  = -par.const.e0 * par.F * par.z; 
+
   % profile modification      
     xGe = 0.6;
     z_spike = -4.0*par.units.nm;
@@ -34,7 +63,7 @@
 
     xww = 0.1;
     q   = 2*par.k1;
-    x  = xww * 0.5 * (1+ cos(q*par.z)) .* par.QW_indicator;
+    x   = xww * 0.5 * (1+ cos(q*par.z)) .* par.QW_indicator;
 
   %%%%%%%%%%%%%%  
   % compute valley splitting: local
@@ -62,11 +91,11 @@
   % plot wave functions
     fig = figure(1); clf; hold all;
 
-    subplot(1,3,1); hold all;
+    subplot(2,2,1); hold all;
 
-    plot_func = @(x) par.N/2 * abs(x).^2;    
+    plot_func = @(x) par.N/4 * abs(x).^2;    
     
-    overlap_threshold = 0.65;
+    overlap_threshold = 0.6;
 
     overlap_loc  = zeros(par.neigs,1) ;
     overlap_nloc = zeros(par.neigs,1) ;
@@ -77,13 +106,13 @@
     for i = 1 : par.neigs
       out = out_loc;
 
-      overlap_loc(i) = abs(out.S(:,i)' * par.QW_indicator)
+      overlap_loc(i) = sum(abs(out.S(:,i) .* par.QW_indicator))/sqrt(par.QW_indicator'*par.QW_indicator);
       if overlap_loc(i) > overlap_threshold
       plot(par.z/par.units.nm, out.E(i)/par.units.meV + plot_func(out.S(:,i)), '-','Color',[1 1 1]*0.9,'LineWidth',2,'DisplayName','local')
       end
 
       out = out_nloc;  
-      overlap_nloc(i) = abs(out.S(:,i)' * par.QW_indicator)
+      overlap_nloc(i) = sum(abs(out.S(:,i) .* par.QW_indicator))/sqrt(par.QW_indicator'*par.QW_indicator);
       if overlap_nloc(i) > overlap_threshold
       plot(par.z/par.units.nm, out.E(i)/par.units.meV + plot_func(out.S(:,i)), '--','Color',[1 1 1]*0.7,'LineWidth',2,'DisplayName','non-local')
       end
@@ -104,25 +133,23 @@
     ylabel('energy (ueV)')
     box on
     legend()
-    xlim([-22, 12])
-    ylim([-10, 230])
+    xlim([-16, 25])
+    ylim([-10, 205])
 
 
   %%%%%%%%
   % zoom / inset
-    subplot(1,3,2); hold all;
+    subplot(2,2,2); hold all;
 
     plot(par.z/par.units.nm, (par.U_F + par.U_QW + par.dEc*x)/par.units.meV, 'k-','LineWidth',2,'DisplayName','potential U')
     for i = 1 : par.neigs
-      out = out_loc;
 
-      overlap_loc(i) = abs(out.S(:,i)' * par.QW_indicator)
+      out = out_loc;
       if overlap_loc(i) > overlap_threshold
       plot(par.z/par.units.nm, out.E(i)/par.units.meV + plot_func(out.S(:,i)), '-','Color',[1 1 1]*0.9,'LineWidth',2,'DisplayName','local')
       end
 
       out = out_nloc;  
-      overlap_nloc(i) = abs(out.S(:,i)' * par.QW_indicator)
       if overlap_nloc(i) > overlap_threshold
       plot(par.z/par.units.nm, out.E(i)/par.units.meV + plot_func(out.S(:,i)), '--','Color',[1 1 1]*0.7,'LineWidth',2,'DisplayName','non-local')
       end
@@ -143,12 +170,23 @@
     ylabel('energy (ueV)')
     box on
     
-    ylim([39, 59])
-    xlim([-11, 1])
+    
+    XMIN = -7;
+    XMAX = 0;
+
+    YMIN = 41;
+    YMAX = 60;
+
+    xlim([XMIN, XMAX])
+    ylim([YMIN, YMAX])
+
+
+    subplot(2,2,1); hold all;
+    plot([XMIN XMAX XMAX XMIN XMIN], [YMIN YMIN YMAX YMAX YMIN],'k--')
 
   %%%%%%%%  
   % plot wave functions power spectral density
-    subplot(1,3,3); hold all;
+    subplot(2,2,3); hold all;
 
 
     xscale = max(abs(fftshift(fft(out.S(:,out.idx_gnd)))).^2);
@@ -170,8 +208,8 @@
     box on
     set(gca,'YScale','log'  )
     legend()
-    xlim([-1.65, 1.65])
-    ylim([2E-15, 2])
+    xlim([-1.05, 1.05])
+    ylim([3E-14, 4])
 
     drawnow
 
@@ -187,5 +225,5 @@
 
     savefig(fig, 'Fig_wave_function.fig')
 
-%end
+end
  
