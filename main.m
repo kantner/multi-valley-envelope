@@ -191,6 +191,11 @@ clc
     compute_C2_coefficients_vs_shear_strain(par)
 
   %%%%%%%%%  
+  % plot Brillouin zone
+    Fig_Brillouin_zone()
+    Fig_BZ_sectors()
+  
+  %%%%%%%%%  
   % plot wave functions and PSD
     Fig_wave_function(par)
 

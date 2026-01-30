@@ -148,7 +148,7 @@ lighting gouraud; % Use Gouraud shading for smooth lighting effects
   drawnow
 
 % save  
-  exportgraphics(gcf,'Fig6a_brillouin_zone_sectors.png','ContentType','image','Resolution',1200,'BackgroundColor','white')
+  exportgraphics(gcf,'Fig_brillouin_zone_sectors.png','ContentType','image','Resolution',1200,'BackgroundColor','white')
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%    
