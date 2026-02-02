@@ -5,9 +5,8 @@ function [] = Fig_QW_width(par)
     filename = 'Fig_QW_width';
 
   % QW width
-    param_range = geomspace(10,105,151,1.05) * par.units.ML;
-
-    param_range = linspace(16,20,9) * par.units.ML;
+    %param_range = geomspace(10,105,151,1.05) * par.units.ML;
+    param_range = geomspace(10,105,131,1.05) * par.units.ML;
 
   % potential offsets
     Uoff_range = par.U0_sweep_range;
@@ -31,9 +30,7 @@ function [] = Fig_QW_width(par)
   % neigs
     par.neigs = 3;
 
-    par.sigma_l=0;
-    par.sigma_u=par.sigma_l;
-
+     
     
   %%%%%%%%%%%%%%  
   % sweep

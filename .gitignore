@@ -1,0 +1,9 @@
+*.mat
+*.asv
+*.fig
+*.mp4
+*.DS_Store
+*.lyx~
+*.lyx#
+main_func.m
+run_scripts.m

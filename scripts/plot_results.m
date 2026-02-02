@@ -31,6 +31,7 @@ function [] = plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_f
 
     %%%%%%%%%%%%%%%%%%%%%%
     % absolute error
+    %{
     subplot(2,2,2); hold all;
 
       if i_U == 1
@@ -41,7 +42,22 @@ function [] = plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_f
       box on
       xlabel(xaxis_label)
       ylabel('abs difference |E_{VS}^{filt}- E_{VS}^{nloc}| (ueV)')
+    %}
       
+    %%%%%%%%%%%%%%%%%%%%%%
+    % relative error
+    subplot(2,2,2); hold all;
+
+      if i_U == 1
+      plot(param_range/param_scale, abs(abs(Delta_filt(:,i_U))-abs(Delta_nloc(:,i_U)))./abs(Delta_nloc(:,i_U)),'k-','LineWidth',2,'DisplayName','rel error')
+      end
+
+      legend()
+      box on
+      xlabel(xaxis_label)
+      ylabel('relative error |E_{VS}^{filt}- E_{VS}^{nloc}|/E_{VS}^{nloc}')      
+      set(gca,'YScale','log')
+
     %%%%%%%%%%%%%%%%%%%%%%
     % arbitrariness (violation of gauge invariance)  
     subplot(2,2,3); hold all;
@@ -58,23 +74,6 @@ function [] = plot_results(Delta_loc, Delta_nloc, Delta_filt, R_loc, R_nloc, R_f
       xlabel(xaxis_label)
       ylabel('arbitrariness 2|R|')
     
-
-    %%%%%%%%%%%%%%%%%%%%%%
-    % relative error
-    %{
-    subplot(2,2,4); hold all;
-
-      if i_U == 1
-      plot(param_range/param_scale, abs(abs(Delta_filt(:,i_U))-abs(Delta_nloc(:,i_U)))./abs(Delta_nloc(:,i_U)),'k-','LineWidth',2,'DisplayName','rel error')
-      end
-
-      legend()
-      box on
-      xlabel(xaxis_label)
-      ylabel('relative error |E_{VS}^{filt}- E_{VS}^{nloc}|/E_{VS}^{nloc}')      
-      set(gca,'YScale','log')
-    
-    %}
 
     %%%%%%%%%%%%%%%%%%%%%%
     % R in complex plane
